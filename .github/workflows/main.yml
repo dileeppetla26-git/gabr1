@@ -1,58 +1,29 @@
 name: project2
-on:
-  push:
-    paths:
-      - "src/"
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-  workflow_dispatch:
-
+on: push
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: get code
         uses: actions/checkout@v3
-
-      - name: Setup NodeJS
+      - name: Set up nodejs
         uses: actions/setup-node@v3
+
         with:
           node-version: 18
-
-      - name: Install Dependencies
+      - name: Install dependencies
         run: npm install
-
-      - name: Build Application
-        run: npm run build
-
-  test:
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Setup NodeJS
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Run Tests
+      - name: Run tests
         run: npm test
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs:
-      - build
-      - test
-
-    steps:
-      - name: Deploy Application
+      - name: Build
+        run: npm run build
+      - name: Deploy
         run: echo "Deploying to production server..."
-      
+  info:
+     runs-on: ubuntu-latest
+     steps:
+       - name: Output of the Job
+         run: echo "${{ toJson(github) }}" 
+
+
 
