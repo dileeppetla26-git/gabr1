@@ -1,32 +1,38 @@
 name: project2
-on: 
+
+on:
   push:
-     branches:
-       - 'dev/**'
+    branches:
+      - 'dev/**'
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps:
-      - name: get code
-        uses: actions/checkout@v3
-      - name: Set up nodejs
-        uses: actions/setup-node@v3
 
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: 18
+
       - name: Install dependencies
         run: npm install
+
       - name: Run tests
         run: npm test
-      - name: Build
+
+      - name: Build application
         run: npm run build
+
       - name: Deploy
         run: echo "Deploying to production server..."
+
   info:
-     runs-on: ubuntu-latest
-     steps:
-       - name: Output of the Job
-         run: echo "${{ toJson(github) }}" 
+    runs-on: ubuntu-latest
 
-
-
+    steps:
+      - name: Output GitHub context
+        run: echo '${{ toJson(github) }}'
