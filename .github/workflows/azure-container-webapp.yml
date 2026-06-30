@@ -1,4 +1,4 @@
-name: project2
+name: project2 
 on:
   push:
 jobs:
@@ -16,6 +16,7 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    needs: build
 
     steps:
       - name: Checkout Code
@@ -29,8 +30,9 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-
+    needs: [build, test]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.test.result == 'success'  
+    
     steps:
       - name: Deploy Application
         run: echo "Deploying to production server..."
-
