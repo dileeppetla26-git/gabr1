@@ -1,31 +1,36 @@
-name: CI-WORKFLOW
-on: push
-
+name: project2
+on:
+  push:
 jobs:
-  buil-test:
-    runs-on: ubuntu-22.04
+  build:
+    runs-on: ubuntu-latest
     steps:
-      - name: checkout
-        uses: actions/checkout@v7
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
-      - name: build
+      - name: Install Dependencies
         run: npm install
 
-      - name: test
+      - name: Build Application
+        run: npm run build
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Tests
         run: npm test
 
-      - name: Cache Dependencies
-        uses: actions/cache@v5
-        with:
-          path: ~/.npm
-          key:  ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+  deploy:
+    runs-on: ubuntu-latest
 
-      - name: Artifact upload
-        uses: actions/upload-artifact@v7
-        with:
-          name: artifact-1
-          path: |
-             package*
+    steps:
+      - name: Deploy Application
+        run: echo "Deploying to production server..."
 
-      - name: deploy
-        run: echo "my code is deployed"
